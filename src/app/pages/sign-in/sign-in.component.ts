@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {
   AbstractControl,
-  FormArray,
   FormBuilder,
   FormGroup,
   ValidatorFn,
@@ -17,19 +16,27 @@ export class SignInComponent implements OnInit {
   constructor(private fb: FormBuilder) {}
   registrationForm!: FormGroup;
   capturedImage: string | null = null;
+  noImageUrl: string =
+    'https://t3.ftcdn.net/jpg/05/26/66/54/360_F_526665446_z51DM27QvvoMZ9Gkyx9gr5mkjSOmjswR.jpg';
 
   ngOnInit(): void {
     this.registrationForm = this.fb.group({
       fullName: ['', Validators.required],
       preferredLanguage: 'EN',
       phone: ['', [Validators.required, this.phoneValidator()]],
-      customerFace: [null, Validators.required],
+      customerFace: ['' || this.noImageUrl, Validators.required],
     });
   }
 
   onSubmit() {
     if (this.registrationForm.valid) {
       console.log('Form submitted:', this.registrationForm.value);
+      alert(JSON.stringify(this.registrationForm.value, null, 2));
+      this.registrationForm.reset();
+      this.registrationForm.patchValue({
+        preferredLanguage: 'EN',
+        customerFace: this.noImageUrl,
+      });
     } else {
       console.log('Form is invalid');
     }
@@ -37,13 +44,14 @@ export class SignInComponent implements OnInit {
 
   phoneValidator(): ValidatorFn {
     return (control: AbstractControl): { [key: string]: any } | null => {
-      const validPhonePattern = /^[0-9]{10}$/; // Adjust the pattern based on your requirement
+      const validPhonePattern = /^[0-9]{10}$/;
       const valid = validPhonePattern.test(control.value);
       return valid ? null : { invalidPhone: true };
     };
   }
 
-  captureImage() {
+  captureImage(ev: MouseEvent) {
+    ev.stopPropagation();
     navigator.mediaDevices
       .getUserMedia({ video: true })
       .then((stream) => {

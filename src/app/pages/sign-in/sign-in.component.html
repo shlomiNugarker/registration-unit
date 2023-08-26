@@ -1,31 +1,24 @@
-<section class="flex">
-  <pre>
-    {{ registrationForm.value | json }}
-    {{ capturedImage | json }}
-  </pre>
-</section>
-
 <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()">
   <h2>Registration Unit</h2>
 
   <!-- FULL NAME: -->
   <div>
-    <label for="fullName">Full name:</label>
-    <input id="fullName" formControlName="fullName" placeholder="fullName" />
-  </div>
-  <div
-    *ngIf="
-      registrationForm.get('fullName')?.invalid &&
-      registrationForm.get('fullName')?.touched
-    "
-    class="error"
-  >
-    Name is required.
+    <!-- <label for="fullName">Full name:</label> -->
+    <input id="fullName" formControlName="fullName" placeholder="Full name" />
+    <div
+      *ngIf="
+        registrationForm.get('fullName')?.invalid &&
+        registrationForm.get('fullName')?.touched
+      "
+      class="error"
+    >
+      Name is required.
+    </div>
   </div>
 
   <!-- PREFERRED LANGUAGE: -->
   <div>
-    <label for="preferredLanguage">Language:</label>
+    <!-- <label for="preferredLanguage">Language:</label> -->
     <select id="preferredLanguage" formControlName="preferredLanguage">
       <option value="" disabled>Select a language</option>
       <option value="EN">EN</option>
@@ -35,35 +28,38 @@
 
   <!-- PHONE: -->
   <div>
-    <label for="phone">Phone:</label>
-    <input id="phone" formControlName="phone" placeholder="phone" />
+    <!-- <label for="phone">Phone:</label> -->
+    <input id="phone" formControlName="phone" placeholder="Phone" />
+    <div
+      *ngIf="
+        registrationForm.get('phone')?.invalid &&
+        registrationForm.get('phone')?.touched
+      "
+      class="error"
+    >
+      Please enter a valid phone.
+    </div>
   </div>
+
+  <!-- IMAGE CUSTOMER FACE: -->
   <div
-    *ngIf="
-      registrationForm.get('phone')?.invalid &&
-      registrationForm.get('phone')?.touched
-    "
-    class="error"
+    *ngIf="!registrationForm.get('customerFace')?.invalid"
+    class="img-container"
   >
-    Please enter a valid phone.
+    <img
+      [src]="registrationForm.get('customerFace')?.value"
+      alt="Captured Image"
+    />
   </div>
 
   <!-- CUSTOMER FACE: -->
-  <button (click)="captureImage()">Capture Photo</button>
-  <div *ngIf="registrationForm.get('customerFace')?.invalid" class="error">
-    Customer face is required.
+  <div class="capture-container">
+    <button (click)="captureImage($event)">Capture Photo</button>
+    <div *ngIf="registrationForm.get('customerFace')?.invalid" class="error">
+      Customer face is required.
+    </div>
   </div>
-
-  <br />
 
   <!-- SUBMIT: -->
   <button [disabled]="registrationForm.invalid" type="submit">SUBMIT</button>
 </form>
-
-<!-- IMAGE CUSTOMER FACE: -->
-<div *ngIf="!registrationForm.get('customerFace')?.invalid">
-  <img
-    [src]="registrationForm.get('customerFace')?.value"
-    alt="Captured Image"
-  />
-</div>
