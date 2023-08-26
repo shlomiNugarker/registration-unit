@@ -8,11 +8,22 @@
 <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()">
   <h2>Registration Unit</h2>
 
+  <!-- FULL NAME: -->
   <div>
     <label for="fullName">Full name:</label>
     <input id="fullName" formControlName="fullName" placeholder="fullName" />
   </div>
+  <div
+    *ngIf="
+      registrationForm.get('fullName')?.invalid &&
+      registrationForm.get('fullName')?.touched
+    "
+    class="error"
+  >
+    Name is required.
+  </div>
 
+  <!-- PREFERRED LANGUAGE: -->
   <div>
     <label for="preferredLanguage">Language:</label>
     <select id="preferredLanguage" formControlName="preferredLanguage">
@@ -22,21 +33,37 @@
     </select>
   </div>
 
-  <div *ngIf="!registrationForm.get('customerFace')?.invalid">
-    <img
-      [src]="registrationForm.get('customerFace')?.value"
-      alt="Captured Image"
-    />
-  </div>
-
+  <!-- PHONE: -->
   <div>
     <label for="phone">Phone:</label>
     <input id="phone" formControlName="phone" placeholder="phone" />
   </div>
+  <div
+    *ngIf="
+      registrationForm.get('phone')?.invalid &&
+      registrationForm.get('phone')?.touched
+    "
+    class="error"
+  >
+    Please enter a valid phone.
+  </div>
 
+  <!-- CUSTOMER FACE: -->
   <button (click)="captureImage()">Capture Photo</button>
+  <div *ngIf="registrationForm.get('customerFace')?.invalid" class="error">
+    Customer face is required.
+  </div>
 
   <br />
-  <br />
+
+  <!-- SUBMIT: -->
   <button [disabled]="registrationForm.invalid" type="submit">SUBMIT</button>
 </form>
+
+<!-- IMAGE CUSTOMER FACE: -->
+<div *ngIf="!registrationForm.get('customerFace')?.invalid">
+  <img
+    [src]="registrationForm.get('customerFace')?.value"
+    alt="Captured Image"
+  />
+</div>

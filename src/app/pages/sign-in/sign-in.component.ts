@@ -1,5 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormArray,
+  FormBuilder,
+  FormGroup,
+  ValidatorFn,
+  Validators,
+} from '@angular/forms';
 
 @Component({
   selector: 'app-sign-in',
@@ -14,8 +21,8 @@ export class SignInComponent implements OnInit {
   ngOnInit(): void {
     this.registrationForm = this.fb.group({
       fullName: ['', Validators.required],
-      preferredLanguage: ['', Validators.required],
-      phone: ['', Validators.required],
+      preferredLanguage: 'EN',
+      phone: ['', [Validators.required, this.phoneValidator()]],
       customerFace: [null, Validators.required],
     });
   }
@@ -26,6 +33,14 @@ export class SignInComponent implements OnInit {
     } else {
       console.log('Form is invalid');
     }
+  }
+
+  phoneValidator(): ValidatorFn {
+    return (control: AbstractControl): { [key: string]: any } | null => {
+      const validPhonePattern = /^[0-9]{10}$/; // Adjust the pattern based on your requirement
+      const valid = validPhonePattern.test(control.value);
+      return valid ? null : { invalidPhone: true };
+    };
   }
 
   captureImage() {
