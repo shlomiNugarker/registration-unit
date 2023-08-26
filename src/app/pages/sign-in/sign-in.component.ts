@@ -14,7 +14,7 @@ export class SignInComponent implements OnInit {
   ngOnInit(): void {
     this.registrationForm = this.fb.group({
       fullName: ['', Validators.required],
-      language: ['', Validators.required],
+      preferredLanguage: ['', Validators.required],
       phone: ['', Validators.required],
       customerFace: [null, Validators.required],
     });

@@ -14,16 +14,19 @@
   </div>
 
   <div>
-    <label for="language">Language:</label>
-    <select id="language" formControlName="language">
+    <label for="preferredLanguage">Language:</label>
+    <select id="preferredLanguage" formControlName="preferredLanguage">
       <option value="" disabled>Select a language</option>
       <option value="EN">EN</option>
       <option value="HEB">HEB</option>
     </select>
   </div>
 
-  <div *ngIf="registrationForm">
-    <img [src]="capturedImage" alt="Captured Image" />
+  <div *ngIf="!registrationForm.get('customerFace')?.invalid">
+    <img
+      [src]="registrationForm.get('customerFace')?.value"
+      alt="Captured Image"
+    />
   </div>
 
   <div>
